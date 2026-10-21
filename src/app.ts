@@ -15,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import * as F from './flow.ts';
 import { GENERAL, kindOf, makeBag, PICTURES, type Reason } from './reasons.ts';
+import { markHaba } from './haba-mark.ts';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDtkJvnZLPIkIAJzj9w3F486bX2E8T5kuU',
@@ -201,6 +202,10 @@ function init(): void {
   const reasons = collection(db, 'cismo', key, 'reasons');
   const record = (kind: F.Kind): void => {
     addDoc(events, { t: F.isoLocal(new Date()), kind }).catch((e: Error) => setStatus('Không lưu được: ' + e.message, true));
+    // "I smoked" also marks "Problem" in Haba, once per day (Iker, 2026-10-21). Only written down, never judged.
+    if (kind === 'smoked') {
+      markHaba('problem').catch(() => setStatus('Đã ghi lại, nhưng không ghi được vào Haba.', true));
+    }
   };
 
   onSnapshot(events, snap => {

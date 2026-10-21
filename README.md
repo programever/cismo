@@ -101,6 +101,13 @@ In plain words, for Cismo: whoever has a key of at least 20 letters can read,
 add and delete the records under that key. Records cannot be changed. Nobody
 can list the keys, so without the link nobody can find the data.
 
+## Haba mark
+
+"I smoked" also marks Problem in Haba, once per day (Iker, 2026-10-21). Like
+everything here, it is only written down, never judged. The code is
+`src/haba-mark.ts`, a copy of `haba/shared/haba-mark.ts`. The browser test
+fakes Haba, so it never writes to Iker's real habit data.
+
 ## Files
 
 | File | What it is |
