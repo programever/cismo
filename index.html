@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1d6f8a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Cismo">
+<meta name="robots" content="noindex">
+<title>Cismo</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><h1>Cismo</h1></header>
+
+<main>
+  <section id="nokey" hidden>
+    <p class="big-text">Hãy mở Cismo bằng link riêng của bạn.</p>
+    <p class="muted">Link riêng có một mã bí mật ở cuối. Không có mã thì không xem được dữ liệu.</p>
+  </section>
+
+  <section id="home" hidden>
+    <div class="since" id="since"></div>
+    <p class="counts" id="counts"></p>
+    <button class="crave" id="crave" type="button">Tôi đang thèm thuốc</button>
+    <p class="status" id="status" aria-live="polite"></p>
+
+    <h2>Lý do của bạn</h2>
+    <div id="reason-card"></div>
+    <button class="again" id="reason-next" type="button">↻ Lý do khác</button>
+    <details class="all">
+      <summary>Xem tất cả lý do (<span id="reason-count">0</span>)</summary>
+      <ul class="reasons" id="reasons"></ul>
+    </details>
+
+    <div class="smoked">
+      <button class="link" id="smoked" type="button">Ghi lại: tôi vừa hút</button>
+      <div class="confirm" id="smoked-confirm" hidden>
+        <p>Ghi lại là bạn vừa hút một điếu?</p>
+        <button type="button" id="smoked-yes">Đúng, ghi lại</button>
+        <button type="button" id="smoked-no">Không</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="session" id="session" hidden>
+  <div class="s-in">
+    <div class="s-top"><span id="s-step"></span><span id="s-left"></span></div>
+    <h2 id="s-title"></h2>
+    <div class="breath" id="breath"><div class="circle" id="circle"></div><span id="breath-text"></span></div>
+    <p class="s-text" id="s-text"></p>
+    <div class="s-reason" id="s-reason">
+      <div id="s-reason-card"></div>
+      <button class="again" id="s-reason-next" type="button">↻ Lý do khác</button>
+    </div>
+    <div class="s-btns" id="s-run">
+      <button type="button" id="s-next">Bước tiếp</button>
+      <button type="button" id="s-stop">Dừng</button>
+    </div>
+    <div class="s-ask" id="s-ask" hidden>
+      <button type="button" class="win" id="a-won">Đã qua, tôi không hút</button>
+      <button type="button" id="a-more">Thêm 5 phút nữa</button>
+      <button type="button" id="a-smoked">Tôi đã hút</button>
+      <button type="button" class="link" id="a-close">Đóng, không ghi gì</button>
+    </div>
+    <button type="button" class="s-done" id="s-done" hidden></button>
+  </div>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>
