@@ -10,6 +10,9 @@
   --accent-soft: #d8ecf2;
   --win: #1f7a52;
   --err: #b3261e;
+  --clean: #cfe9db; --clean-text: #14563a;
+  --smoke: #fbdcc0; --smoke-text: #8a4210;
+  --gold: #c98a00;
   --k-race: #dcefe4; --k-race-ic: #1f7a52;
   --k-family: #fbe3e3; --k-family-ic: #c2413b;
   --k-health: #dbe8f9; --k-health-ic: #2a6bc2;
@@ -30,6 +33,9 @@
     --accent-soft: #17323b;
     --win: #1f7a52;
     --err: #ff8a80;
+    --clean: #1d4a35; --clean-text: #9fe3c0;
+    --smoke: #4f2e14; --smoke-text: #ffc08a;
+    --gold: #f2c14e;
     --k-race: #173d2c; --k-race-ic: #5fd09a;
     --k-family: #45201f; --k-family-ic: #f08a84;
     --k-health: #1f3552; --k-health-ic: #7fb0f0;
@@ -73,6 +79,38 @@ button:focus-visible { outline: 3px solid var(--accent-text); outline-offset: 2p
 .confirm p { margin: 0 0 10px; }
 .confirm button { min-height: 44px; padding: 0 14px; margin-right: 8px; border-radius: 10px; border: 1px solid var(--border);
   background: var(--surface); color: var(--text); }
+
+/* ---- 30-day plan ---- */
+.since .dayno { color: var(--accent-text); font-weight: 800; font-size: 20px; }
+.bar { height: 10px; border-radius: 5px; background: var(--surface-2); overflow: hidden; margin: 4px 0 12px; }
+.bar div { height: 100%; width: 0; background: var(--win); border-radius: 5px; }
+.hard { margin: 0 0 10px; padding: 10px 12px; border-radius: 12px; background: var(--smoke); color: var(--smoke-text); font-weight: 600; }
+.day { padding: 16px; border-radius: 16px; background: var(--surface-2); }
+.day .body { margin: 0; font-size: 18px; font-weight: 600; }
+.day .task { margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--border); }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin-top: 8px; }
+.cal .wd { text-align: center; font-size: 13px; font-weight: 700; color: var(--text-2); padding-bottom: 2px; }
+.cal .c { position: relative; aspect-ratio: 1; min-height: 44px; padding: 0; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text-2); display: grid; place-items: center; }
+.cal .c .d { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cal .c .mo { position: absolute; top: 2px; left: 4px; font-size: 10px; font-weight: 700; }
+.cal .c .star { position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; fill: var(--border); }
+.cal .c .w { position: absolute; bottom: 1px; font-size: 11px; font-weight: 700; }
+.cal .st-clean { background: var(--clean); border-color: var(--clean); color: var(--clean-text); }
+.cal .st-smoked { background: var(--smoke); border-color: var(--smoke); color: var(--smoke-text); }
+.cal .st-open { color: var(--text); }
+.cal .st-clean .star, .cal .st-smoked .star, .cal .st-open .star { fill: var(--gold); }
+.cal .today { border: 3px solid var(--accent-text); }
+.cal .picked { outline: 3px solid var(--text); outline-offset: 1px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 14px; color: var(--text-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend .sw { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--border); }
+.legend .sw.st-clean { background: var(--clean); } .legend .sw.st-smoked { background: var(--smoke); }
+.legend .sw.st-open { border: 3px solid var(--accent-text); }
+.legend .star { width: 15px; height: 15px; fill: var(--gold); }
+#picked { margin-top: 14px; }
+#picked h3 { margin: 0 0 4px; font-size: 17px; }
+#picked .state { margin: 0 0 8px; color: var(--text-2); }
 
 /* ---- session ---- */
 .session { position: fixed; inset: 0; z-index: 10; background: var(--surface); overflow-y: auto;

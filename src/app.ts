@@ -1,4 +1,5 @@
-// Cismo page. Home: how long without a cigarette, cravings beaten, one big "I crave a cigarette" button, Iker's reasons.
+// Cismo page. Home: the 30-day plan (day n of 30, today's text, a calendar, see plan.ts), how long without a
+// cigarette, cravings beaten, one big "I crave a cigarette" button, Iker's reasons.
 // The button opens a 5-minute session (see flow.ts): slow breathing, water, moving, reasons, then "did it pass?".
 // Text only, no voice (Iker, 2026-10-21).
 //
@@ -14,6 +15,7 @@ import {
   collection, addDoc, onSnapshot, type Firestore,
 } from 'firebase/firestore';
 import * as F from './flow.ts';
+import * as P from './plan.ts';
 import { GENERAL, kindOf, makeBag, PICTURES, type Reason } from './reasons.ts';
 import { markHaba } from './haba-mark.ts';
 
@@ -70,11 +72,69 @@ function card(r: Reason | undefined): string {
 function showReason(where: 'reason-card' | 's-reason-card'): void { shown = nextReason(); $(where).innerHTML = card(shown); }
 
 // ---------- home ----------
-function renderHome(): void {
-  const s = F.stats(state.events, new Date());
+const STAR = '<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4.5 2 7.5-6.5-4.5-6.5 4.5 2-7.5L2 9h7z"/></svg>';
+let picked = 0;   // the calendar day Iker tapped, 0 = none
+
+/** One day's text: what happens, where the fact comes from, and today's small task. */
+function dayText(n: number): string {
+  const t = P.textOf(n);
+  return (t.hard && n <= P.DAYS ? '<p class="hard">Đây là ngày khó. Cơn thèm có thể mạnh. Bấm nút xanh bất cứ lúc nào.</p>' : '') +
+    `<div class="day"><p class="body">${esc(t.body)}</p>${t.from ? `<p class="rf">— ${esc(t.from)}</p>` : ''}` +
+    `<p class="task"><b>Việc nên làm:</b> ${esc(t.task)}</p></div>`;
+}
+
+function cellWords(c: P.Cell): string {
+  const won = c.won ? ` Thắng ${c.won} cơn thèm.` : '';
+  if (c.state === 'future') return 'Chưa đến.';
+  if (c.state === 'smoked') return `Có hút (${c.smoked} lần). Đã ghi lại, không sao. Ngày mới bắt đầu lại.` + won;
+  if (c.state === 'open') return 'Hôm nay, chưa hút điếu nào.' + won;
+  return 'Không hút.' + won;
+}
+
+function renderPlan(now: Date): void {
+  const p = P.progress(state.events, now);
+  const cells = P.calendar(state.events, now);
+
+  // Top: which day, and how long without smoking.
   $('since').innerHTML = !state.loaded ? '<span class="muted">Đang tải…</span>'
-    : s.since === null ? '<b>Hôm nay là ngày đầu tiên.</b><span>Khi thèm thuốc, bấm nút bên dưới.</span>'
-    : `<span>${s.fromSmoke ? 'Không hút thuốc đã' : 'Bắt đầu từ'}</span><b>${esc(F.fmtSince(s.since))}</b>`;
+    : p.n < 1 ? `<span>Ngày 1 bắt đầu sau</span><b>${esc(F.fmtSince(p.untilStart))}</b>` +
+      `<span>Lúc 4 giờ sáng, ${esc(P.dayName(P.START))}. Mục tiêu: 30 ngày không hút thuốc.</span>`
+    : (p.n <= P.DAYS ? `<span class="dayno">Ngày ${p.n} / ${P.DAYS}</span>` : `<span class="dayno">Đã xong 30 ngày</span>`) +
+      `<span>Không hút thuốc đã</span><b>${esc(F.fmtSince(p.since ?? 0))}</b>`;
+  ($('bar-fill') as HTMLElement).style.width = `${Math.min(100, Math.max(0, p.n) / P.DAYS * 100)}%`;
+  $('bar').hidden = !state.loaded;
+
+  // Today's text. Before the start: day 1's text, so Iker can read it tonight.
+  $('today-head').textContent = p.n < 1 ? 'Ngày mai · Ngày 1' : p.n <= P.DAYS ? `Hôm nay · Ngày ${p.n}` + (P.textOf(p.n).title ? ` · ${P.textOf(p.n).title}` : '') : 'Sau 30 ngày';
+  $('today').innerHTML = dayText(p.n);
+
+  // The calendar, Monday to Sunday.
+  $('cal-sum').textContent = p.n < 1 ? 'Từ 12/11 đến 11/12. Bấm vào một ngày để xem.'
+    : `${p.clean} ngày không hút` + (p.smokedDays ? `, ${p.smokedDays} ngày có hút` : '') + '. Bấm vào một ngày để xem.';
+  const lead = P.weekday(P.START);
+  let html = P.WEEKDAYS_SHORT.map(w => `<span class="wd">${w}</span>`).join('') + '<span></span>'.repeat(lead);
+  for (const c of cells) {
+    const [, m, d] = c.day.split('-').map(Number);
+    const month = c.n === 1 || d === 1 ? `<span class="mo">Th${m}</span>` : '';
+    html += `<button type="button" class="c st-${c.state}${c.today ? ' today' : ''}${picked === c.n ? ' picked' : ''}" data-n="${c.n}" ` +
+      `aria-label="Ngày ${c.n}, ${esc(P.dayName(c.day))}. ${esc(cellWords(c))}">` +
+      `${month}<span class="d">${d}</span>${c.prize ? STAR : ''}${c.won ? `<span class="w">✓${c.won}</span>` : ''}</button>`;
+  }
+  $('cal').innerHTML = html;
+
+  const c = cells[picked - 1];
+  $('picked').hidden = !c;
+  if (c) {
+    const t = P.textOf(c.n);
+    $('picked').innerHTML = `<h3>Ngày ${c.n} · ${esc(P.dayName(c.day))}${t.title ? ` · ${esc(t.title)}` : ''}</h3>` +
+      `<p class="state">${esc(cellWords(c))}</p>` + dayText(c.n);
+  }
+}
+
+function renderHome(): void {
+  const now = new Date();
+  renderPlan(now);
+  const s = F.stats(state.events, now);
   $('counts').textContent = state.loaded
     ? `Hôm nay đã thắng ${s.wonToday} cơn thèm. Tổng cộng: ${s.wonTotal}.` : '';
   const all = allReasons();
@@ -224,6 +284,14 @@ function init(): void {
   }, () => { /* the events listener already shows the error */ });
 
   $('crave').addEventListener('click', startSession);
+  $('cal').addEventListener('click', e => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('button[data-n]');
+    if (!b) return;
+    const n = Number(b.dataset['n']);
+    picked = picked === n ? 0 : n;
+    renderHome();
+    if (picked) $('picked').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
   $('reason-next').addEventListener('click', () => showReason('reason-card'));
   $('s-reason-next').addEventListener('click', () => { session.reasonAt = sec(); showReason('s-reason-card'); });
   $('s-next').addEventListener('click', nextStep);

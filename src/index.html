@@ -26,8 +26,21 @@
   <section id="home" hidden>
     <div class="since" id="since"></div>
     <p class="counts" id="counts"></p>
+    <div class="bar" id="bar" aria-hidden="true"><div id="bar-fill"></div></div>
     <button class="crave" id="crave" type="button">Tôi đang thèm thuốc</button>
     <p class="status" id="status" aria-live="polite"></p>
+
+    <h2 id="today-head">Hôm nay</h2>
+    <div id="today"></div>
+
+    <h2>30 ngày</h2>
+    <p class="muted" id="cal-sum"></p>
+    <div class="cal" id="cal"></div>
+    <div class="legend">
+      <span><i class="sw st-clean"></i>Không hút</span><span><i class="sw st-smoked"></i>Có hút</span>
+      <span><i class="sw st-open"></i>Hôm nay</span><span><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4.5 2 7.5-6.5-4.5-6.5 4.5 2-7.5L2 9h7z"/></svg>Mốc</span>
+    </div>
+    <div id="picked" hidden></div>
 
     <h2>Lý do của bạn</h2>
     <div id="reason-card"></div>

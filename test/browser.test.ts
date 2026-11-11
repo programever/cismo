@@ -1,5 +1,6 @@
 // Test of the whole page in a headless browser, against the real Firestore, with a throwaway key (never Iker's).
-// It beats one craving, records one cigarette, checks the counts, and deletes its records at the end.
+// It beats one craving, records one cigarette, checks the counts and the 30-day calendar, and deletes its records
+// at the end. The clock is set to day 3 of the plan (14 November 2026), so the test works on any date.
 // Haba is faked: the test checks that "I smoked" sends one "problem" mark, without writing to the real Haba.
 // Build first (npm run build), then: npm run test:browser
 // To test the live site instead: CISMO_URL=https://programever.github.io/cismo/ npm run test:browser
@@ -35,9 +36,16 @@ test('a craving session is saved and counted', async () => {
       habaWrites.push(req.postDataJSON().fields.item.stringValue);
       return route.fulfill({ json: {} });
     });
+    await page.clock.setFixedTime(new Date('2026-11-14T10:00:00+07:00'));
     await page.goto(url + '#' + secret);
     await page.waitForFunction(() => document.querySelector('#counts')!.textContent!.includes('Tổng cộng'), null, { timeout: 20000 });
-    assert.match(await page.locator('#since').innerText(), /ngày đầu tiên/);
+    assert.match(await page.locator('#since').innerText(), /Ngày 3 \/ 30[\s\S]*2 ngày 6 giờ/);
+    assert.match(await page.locator('#today-head').innerText(), /Ngày 3/);
+    assert.equal(await page.locator('#cal button').count(), 30);
+    assert.equal(await page.locator('#cal .st-clean').count(), 2, 'day 1 and 2 without a cigarette');
+    assert.equal(await page.locator('#cal .today').getAttribute('data-n'), '3');
+    await page.click('#cal button[data-n="1"]');
+    assert.match(await page.locator('#picked').innerText(), /Ngày 1 · Thứ Năm 12\/11[\s\S]*Không hút/);
 
     await page.click('#crave');
     assert.ok(await page.locator('#session').isVisible());
@@ -48,7 +56,8 @@ test('a craving session is saved and counted', async () => {
 
     await page.click('#smoked');
     await page.click('#smoked-yes');
-    await page.waitForFunction(() => document.querySelector('#since')!.textContent!.includes('Không hút thuốc đã'), null, { timeout: 20000 });
+    await page.waitForFunction(() => document.querySelector('#since')!.textContent!.includes('0 phút'), null, { timeout: 20000 });
+    assert.equal(await page.locator('#cal .st-smoked').getAttribute('data-n'), '3', 'today is orange now');
     assert.equal(await page.locator('#status').innerText(), 'Đã ghi lại.');
     for (let i = 0; i < 50 && !habaWrites.length; i++) await page.waitForTimeout(100);
     assert.deepEqual(habaWrites, ['problem']);

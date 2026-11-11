@@ -11,6 +11,25 @@ key the page shows nothing.
 
 ## What it does
 
+- **The 30-day plan** (Iker, 2026-11-11: "tomorrow is my first day of quit
+  smoking, our target is 30 days, it must help me every day, it needs a
+  calendar"). Day 1 is Thursday 12 November 2026, day 30 is Friday 11
+  December. A day starts at 4 in the morning, like Haba. The code is in
+  `src/plan.ts`; to change the start day, change `START` there.
+  - The top of the page says "Ngày 4 / 30", how long since the last cigarette
+    (counted from 04:00 on day 1 at the earliest), and a progress bar. Before
+    day 1 it counts down to the start.
+  - "Hôm nay" shows today's own text: what happens in the body that day (with
+    the source, mostly the British health service NHS), and one small task.
+    The first week is marked as hard days, with a warning.
+  - A calendar of the 30 days, Monday to Sunday. Green: no cigarette that day.
+    Orange: a day with "I smoked". Today has a border. A star marks day 1, 3,
+    7, 14, 21 and 30. The small number is the cravings beaten that day. Tapping
+    a day shows what happened and that day's text.
+  - A day with a cigarette is only orange. The 30 days never start again from
+    zero, and nothing is judged.
+  - The calendar is made from the records the page already keeps, so the
+    data and the Firestore rules did not change.
 - **Home.** How long since the last cigarette, how many cravings Iker beat
   today and in total, one big button "Tôi đang thèm thuốc" (I crave a
   cigarette), and one reason at a time with a small picture. "↻ Lý do khác"
