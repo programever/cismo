@@ -1,0 +1,11 @@
+{
+  "name": "Cismo",
+  "short_name": "Cismo",
+  "display": "standalone",
+  "background_color": "#fbfcfc",
+  "theme_color": "#1d6f8a",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
