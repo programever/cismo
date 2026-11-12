@@ -36,7 +36,7 @@ test('a craving session is saved and counted', async () => {
       habaWrites.push(req.postDataJSON().fields.item.stringValue);
       return route.fulfill({ json: {} });
     });
-    await page.clock.setFixedTime(new Date('2026-11-14T10:00:00+07:00'));
+    await page.clock.setFixedTime(new Date('2026-11-18T10:00:00+07:00'));
     await page.goto(url + '#' + secret);
     await page.waitForFunction(() => document.querySelector('#counts')!.textContent!.includes('Tổng cộng'), null, { timeout: 20000 });
     assert.match(await page.locator('#since').innerText(), /Ngày 3 \/ 30[\s\S]*2 ngày 6 giờ/);
@@ -45,7 +45,7 @@ test('a craving session is saved and counted', async () => {
     assert.equal(await page.locator('#cal .st-clean').count(), 2, 'day 1 and 2 without a cigarette');
     assert.equal(await page.locator('#cal .today').getAttribute('data-n'), '3');
     await page.click('#cal button[data-n="1"]');
-    assert.match(await page.locator('#picked').innerText(), /Ngày 1 · Thứ Năm 12\/11[\s\S]*Không hút/);
+    assert.match(await page.locator('#picked').innerText(), /Ngày 1 · Thứ Hai 16\/11[\s\S]*Không hút/);
 
     await page.click('#crave');
     assert.ok(await page.locator('#session').isVisible());

@@ -1,6 +1,6 @@
 // Cismo: the 30-day plan (Iker, 2026-11-11: "tomorrow is my first day of quit smoking, our target is 30 days,
 // it must help me to quit smoking every day, it needs a calendar").
-// Day 1 is Thursday 12 November 2026. A day starts at 04:00, like Haba (see dayKey in flow.ts).
+// Day 1 is Monday 16 November 2026 (Iker, 2026-11-12: moved from Thursday 12 November to the next Monday). A day starts at 04:00, like Haba (see dayKey in flow.ts).
 // Every day has its own short text: what happens in the body that day (with the source), and one small task.
 // The calendar is made only from the records Iker already makes (craving beaten, I smoked), so the Firestore
 // rules do not change. A day with a cigarette is orange; the plan never starts again from zero. Never judged.
@@ -8,7 +8,7 @@
 
 import { dayKey, type Ev } from './flow.ts';
 
-export const START = '2026-11-12';
+export const START = '2026-11-16';
 export const DAYS = 30;
 /** Days with a prize picture on the calendar. */
 export const PRIZES: readonly number[] = [1, 3, 7, 14, 21, 30];
@@ -136,11 +136,14 @@ export function weekday(day: string): number { return (new Date(utcOf(day)).getU
 export const WEEKDAYS = ['Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy', 'Chủ Nhật'];
 export const WEEKDAYS_SHORT = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 
-/** "Thứ Năm 12/11" */
-export function dayName(day: string): string {
+/** "16/11" */
+export function dm(day: string): string {
   const [, m, d] = day.split('-').map(Number);
-  return `${WEEKDAYS[weekday(day)]} ${d}/${m}`;
+  return `${d}/${m}`;
 }
+
+/** "Thứ Hai 16/11" */
+export function dayName(day: string): string { return `${WEEKDAYS[weekday(day)]} ${dm(day)}`; }
 
 /** clean: no cigarette that day. smoked: at least one. open: today, no cigarette yet. future: not come yet. */
 export type CellState = 'clean' | 'smoked' | 'open' | 'future';

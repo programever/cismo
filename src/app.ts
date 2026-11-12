@@ -104,12 +104,12 @@ function renderPlan(now: Date): void {
   ($('bar-fill') as HTMLElement).style.width = `${Math.min(100, Math.max(0, p.n) / P.DAYS * 100)}%`;
   $('bar').hidden = !state.loaded;
 
-  // Today's text. Before the start: day 1's text, so Iker can read it tonight.
-  $('today-head').textContent = p.n < 1 ? 'Ngày mai · Ngày 1' : p.n <= P.DAYS ? `Hôm nay · Ngày ${p.n}` + (P.textOf(p.n).title ? ` · ${P.textOf(p.n).title}` : '') : 'Sau 30 ngày';
+  // Today's text. Before the start: day 1's text, so Iker can read it before ("Ngày mai" only on the evening before).
+  $('today-head').textContent = p.n < 1 ? `${p.n === 0 ? 'Ngày mai' : P.dayName(P.START)} · Ngày 1` :p.n <= P.DAYS ? `Hôm nay · Ngày ${p.n}` + (P.textOf(p.n).title ? ` · ${P.textOf(p.n).title}` : '') : 'Sau 30 ngày';
   $('today').innerHTML = dayText(p.n);
 
   // The calendar, Monday to Sunday.
-  $('cal-sum').textContent = p.n < 1 ? 'Từ 12/11 đến 11/12. Bấm vào một ngày để xem.'
+  $('cal-sum').textContent = p.n < 1 ? `Từ ${P.dm(P.dayOf(1))} đến ${P.dm(P.dayOf(P.DAYS))}. Bấm vào một ngày để xem.`
     : `${p.clean} ngày không hút` + (p.smokedDays ? `, ${p.smokedDays} ngày có hút` : '') + '. Bấm vào một ngày để xem.';
   const lead = P.weekday(P.START);
   let html = P.WEEKDAYS_SHORT.map(w => `<span class="wd">${w}</span>`).join('') + '<span></span>'.repeat(lead);
