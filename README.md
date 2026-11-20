@@ -13,9 +13,10 @@ key the page shows nothing.
 
 - **The 30-day plan** (Iker, 2026-11-11: "tomorrow is my first day of quit
   smoking, our target is 30 days, it must help me every day, it needs a
-  calendar"). Day 1 is Monday 7 December 2026, day 30 is Tuesday 5
-  January 2027. (Iker moved the start two times: on 2026-11-12 from Thursday
-  12 November to Monday 16 November, and on 2026-11-18 to Monday 7 December.) A day starts at 4 in the morning, like Haba. The code is in
+  calendar"). Day 1 is Saturday 21 November 2026, day 30 is Sunday 20
+  December 2026. (Iker moved the start three times: on 2026-11-12 from Thursday
+  12 November to Monday 16 November, on 2026-11-18 to Monday 7 December, and
+  on 2026-11-20 to Saturday 21 November: "I start quit smoking now".) A day starts at 4 in the morning, like Haba. The code is in
   `src/plan.ts`; to change the start day, change `START` there.
   - The top of the page says "Ngày 4 / 30", how long since the last cigarette
     (counted from 04:00 on day 1 at the earliest), and a progress bar. Before

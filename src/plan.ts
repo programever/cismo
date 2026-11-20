@@ -1,6 +1,7 @@
 // Cismo: the 30-day plan (Iker, 2026-11-11: "tomorrow is my first day of quit smoking, our target is 30 days,
 // it must help me to quit smoking every day, it needs a calendar").
-// Day 1 is Monday 7 December 2026 (Iker, 2026-11-18: moved from Monday 16 November; before that, on 2026-11-12, from Thursday 12 November).
+// Day 1 is Saturday 21 November 2026 (Iker, 2026-11-20: "I start quit smoking now", moved from Monday 7 December;
+// before that, on 2026-11-18 from Monday 16 November, and on 2026-11-12 from Thursday 12 November).
 // A day starts at 04:00, like Haba (see dayKey in flow.ts).
 // Every day has its own short text: what happens in the body that day (with the source), and one small task.
 // The calendar is made only from the records Iker already makes (craving beaten, I smoked), so the Firestore
@@ -9,7 +10,7 @@
 
 import { dayKey, type Ev } from './flow.ts';
 
-export const START = '2026-12-07';
+export const START = '2026-11-21';
 export const DAYS = 30;
 /** Days with a prize picture on the calendar. */
 export const PRIZES: readonly number[] = [1, 3, 7, 14, 21, 30];
